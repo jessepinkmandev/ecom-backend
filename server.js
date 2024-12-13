@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/api", require("./routes/authRoutes"));
+app.use("/api", require("./routes/Dashboard/categoryRoutes"));
 
 app.get("/", (req, res) => res.send("My Backend"));
 
