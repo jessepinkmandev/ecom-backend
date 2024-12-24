@@ -23,6 +23,7 @@ app.use(cookieParser());
 
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/Dashboard/categoryRoutes"));
+app.use("/api", require("./routes/Dashboard/productRoutes"));
 
 app.get("/", (req, res) => res.send("My Backend"));
 

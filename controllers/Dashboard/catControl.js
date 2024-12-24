@@ -48,7 +48,46 @@ class categoryController {
   };
 
   get_category = async (req, res) => {
-    console.log("running ok");
+    const { page, search, perPage } = req.query;
+
+    try {
+      let skipPage = "";
+      if (page && perPage) {
+        skipPage = parseInt(perPage) * (parseInt(page) - 1);
+      }
+      if (search && page && perPage) {
+        const categorys = await categoryModel
+          .find({
+            $text: { $search: search },
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalCategory = await categoryModel
+          .find({
+            $text: { $search: search },
+          })
+          .countDocuments();
+        responseReturn(res, 200, { categorys, totalCategory });
+      } else if (search === "" && page && perPage) {
+        const categorys = await categoryModel
+          .find({})
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalCategory = await categoryModel.find({}).countDocuments();
+        responseReturn(res, 200, { categorys, totalCategory });
+      } else {
+        const categorys = await categoryModel.find({}).sort({ createdAt: -1 });
+
+        const totalCategory = await categoryModel.find({}).countDocuments();
+        responseReturn(res, 200, { categorys, totalCategory });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 }
 
