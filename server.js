@@ -21,6 +21,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+app.use("/api/home", require("./routes/House/houseRoutes"));
 app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/Dashboard/categoryRoutes"));
 app.use("/api", require("./routes/Dashboard/productRoutes"));
