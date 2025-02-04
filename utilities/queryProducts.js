@@ -15,6 +15,19 @@ class queryProducts {
 
   //
 
+  searchQuery = () => {
+    this.products = this.query.searchValue
+      ? this.products.filter(
+          (p) =>
+            p.name.toUpperCase().indexOf(this.query.searchValue.toUpperCase()) >
+            -1
+        )
+      : this.products;
+    return this;
+  };
+
+  //
+
   ratingQuery = () => {
     this.products = this.query.rating
       ? this.products.filter(

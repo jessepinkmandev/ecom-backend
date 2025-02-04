@@ -38,31 +38,33 @@ class houseControllers {
   //
 
   query_products = async (req, res) => {
-    const perPage = 2;
+    const perPage = 3;
 
     req.query.perPage = perPage;
-    console.log(req.query);
+    // console.log(req.query);
 
     try {
       const products = await productModel.find({}).sort({
         createdAt: -1,
       });
 
-      const totalProduct = new this.queryProducts(products, req.query)
+      const totalProduct = new queryProducts(products, req.query)
         .categoryQuery()
         .ratingQuery()
-        .priceQuery()
-        .sortByPrice()
-        .limit()
-        .skip()
-        .getProducts();
-
-      const result = new this.queryProducts(products, req.query)
-        .categoryQuery()
-        .ratingQuery()
+        .searchQuery()
         .priceQuery()
         .sortByPrice()
         .countProducts();
+
+      const result = new queryProducts(products, req.query)
+        .categoryQuery()
+        .ratingQuery()
+        .priceQuery()
+        .searchQuery()
+        .sortByPrice()
+        // .skip()
+        // .limit()
+        .getProducts();
 
       responseReturn(res, 200, {
         products: result,
@@ -110,7 +112,7 @@ class houseControllers {
       const allProducts = await productModel.find({}).limit(3).sort({
         createdAt: -1,
       });
-      const latestProducts = this.formateProduct(allProducts);
+      const latest_product = this.formateProduct(allProducts);
 
       const allProducts2 = await productModel.find({}).limit(3).sort({
         rating: -1,
@@ -124,7 +126,7 @@ class houseControllers {
 
       responseReturn(res, 200, {
         products,
-        latestProducts,
+        latest_product,
         topRatedProducts,
         discountProducts,
       });
