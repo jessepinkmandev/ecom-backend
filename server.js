@@ -26,6 +26,9 @@ app.use("/api", require("./routes/authRoutes"));
 app.use("/api", require("./routes/Dashboard/categoryRoutes"));
 app.use("/api", require("./routes/Dashboard/productRoutes"));
 app.use("/api", require("./routes/Dashboard/sellerRoutes"));
+app.use("/api", require("./routes/House/customerAuthRoute"));
+app.use("/api", require("./routes/House/cartRoutes"));
+app.use("/api", require("./routes/Order/orderRoutes"));
 
 app.get("/", (req, res) => res.send("My Backend"));
 
