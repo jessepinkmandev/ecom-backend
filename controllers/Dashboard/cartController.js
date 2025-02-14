@@ -1,5 +1,6 @@
 const productModel = require("../../models/productModel");
 const cartModel = require("../../models/cartModel");
+const wishlistModel = require("../../models/wishlistModel");
 const { responseReturn } = require("../../utilities/response");
 const {
   mongo: { ObjectId },
@@ -159,6 +160,43 @@ class cartController {
     }
   };
   //
+
+  get_wishlist = async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const wishlist = await wishlistModel.find({ userId });
+      responseReturn(res, 200, { wishlistCount: wishlist.length, wishlist });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  //
+
+  add_to_wishlist = async (req, res) => {
+    const { product, userId } = req.body;
+    const { _id, name, slug, price, discount, images, rating } = product;
+    try {
+      const product = await wishlistModel.findOne({ slug });
+      if (product) {
+        responseReturn(res, 400, { error: "Product Already In Wishlist" });
+      } else {
+        await wishlistModel.create({
+          userId,
+          ProductId: _id,
+          name,
+          slug,
+          price,
+          discount,
+          images,
+          rating,
+        });
+        responseReturn(res, 201, { message: "Product Added In Wishlist" });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  //
   quantity_increment = async (req, res) => {
     const { cartId } = req.params;
     try {
@@ -186,6 +224,20 @@ class cartController {
     }
   };
 
+  //
+  delete_wishlist = async (req, res) => {
+    const { wishlistId } = req.params;
+    try {
+      const wishlist = await wishlistModel.findByIdAndDelete(wishlistId);
+      responseReturn(res, 200, {
+        message: "Product Removed Successfully",
+        wishlist,
+        wishlistId,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   //
 }
 

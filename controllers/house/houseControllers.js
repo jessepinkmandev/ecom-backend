@@ -36,6 +36,50 @@ class houseControllers {
   };
 
   //
+  product_details = async (req, res) => {
+    console.log(req.params);
+    const { slug } = req.params;
+    try {
+      const product = await productModel.findOne({ slug });
+      const relatedProduct = await productModel
+        .find({
+          $and: [
+            {
+              _id: {
+                $ne: product.id,
+              },
+            },
+            {
+              category: {
+                $eq: product.category,
+              },
+            },
+          ],
+        })
+        .limit(3);
+      const moreProduct = await productModel
+        .find({
+          $and: [
+            {
+              _id: {
+                $ne: product.id,
+              },
+            },
+            {
+              sellerId: {
+                $eq: product.sellerId,
+              },
+            },
+          ],
+        })
+        .limit(3);
+      responseReturn(res, 200, { product, relatedProduct, moreProduct });
+      console.log(product);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  //
 
   query_products = async (req, res) => {
     const perPage = 3;
