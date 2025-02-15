@@ -8,10 +8,10 @@ const sellerCustomerSchema = new Schema(
     },
     myFriends: {
       type: Array,
-      required: [],
+      default: [],
     },
   },
   { timestamps: true }
 );
 
-module.exports = model("seller_customer", sellerCustomerSchema);
+module.exports = model("seller_customers", sellerCustomerSchema);
