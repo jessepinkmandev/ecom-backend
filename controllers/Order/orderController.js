@@ -159,6 +159,53 @@ class orderController {
     }
   };
   //
+  get_admin_orders = async (req, res) => {
+    let { page, search, perPage } = req.query;
+    // console.log(req.query);
+
+    perPage = parseInt(perPage);
+    page = parseInt(page);
+
+    const skipPage = perPage * (page - 1);
+
+    try {
+      if (search) {
+        //
+      } else {
+        const orders = await customerOrder
+          .aggregate([
+            {
+              $lookup: {
+                from: "authorders",
+                localField: "_id",
+                foreignField: "orderId",
+                as: "suborder",
+              },
+            },
+          ])
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalOrder = await customerOrder.aggregate([
+          {
+            $lookup: {
+              from: "authorders",
+              localField: "_id",
+              foreignField: "orderId",
+              as: "suborder",
+            },
+          },
+        ]);
+
+        // console.log(orders);
+        responseReturn(res, 200, { orders, totalOrder });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  //
 
   get_order_details = async (req, res) => {
     const { orderId } = req.params;

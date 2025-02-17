@@ -9,6 +9,17 @@ router.get(
   sellerController.request_seller_get
 );
 router.get(
+  "/get-active-seller",
+  authMiddleware,
+  sellerController.active_seller_get
+);
+router.get(
+  "/get-deactive-seller",
+  authMiddleware,
+  sellerController.deactive_seller_get
+);
+
+router.get(
   "/get-seller/:sellerId",
   authMiddleware,
   sellerController.get_seller

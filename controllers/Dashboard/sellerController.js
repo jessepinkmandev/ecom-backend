@@ -21,22 +21,138 @@ class sellerController {
 
     try {
       if (search) {
-      } else {
         const sellers = await sellerModel
-          .find({ status: "pending" })
+          .find({
+            $text: { $search: search },
+            status: "inactive",
+          })
           .skip(skipPage)
           .limit(perPage)
           .sort({ createdAt: -1 });
 
         const totalSeller = await sellerModel
-          .find({ status: "pending" })
+          .find({
+            $text: { $search: search },
+            status: "inactive",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 })
+          .countDocuments();
+
+        responseReturn(res, 200, { sellers, totalSeller });
+      } else {
+        const sellers = await sellerModel
+          .find({ status: "inactive" })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSeller = await sellerModel
+          .find({ status: "inactive" })
           .countDocuments();
         responseReturn(res, 200, { sellers, totalSeller });
+        // console.log(sellers);
       }
     } catch (error) {
       responseReturn(res, 500, { error: error.message });
     }
   };
+
+  //
+
+  active_seller_get = async (req, res) => {
+    const { page, search, perPage } = req.query;
+    console.log(req.query);
+    let skipPage;
+    skipPage = parseInt(perPage) * (parseInt(page) - 1);
+
+    try {
+      if (search) {
+        const sellers = await sellerModel
+          .find({
+            $text: { $search: search },
+            status: "active",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSeller = await sellerModel
+          .find({
+            $text: { $search: search },
+            status: "active",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 })
+          .countDocuments();
+
+        responseReturn(res, 200, { sellers, totalSeller });
+      } else {
+        const sellers = await sellerModel
+          .find({ status: "active" })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSeller = await sellerModel
+          .find({ status: "active" })
+          .countDocuments();
+        responseReturn(res, 200, { sellers, totalSeller });
+        // console.log(sellers);
+      }
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  //
+  deactive_seller_get = async (req, res) => {
+    const { page, search, perPage } = req.query;
+    console.log(req.query);
+    let skipPage;
+    skipPage = parseInt(perPage) * (parseInt(page) - 1);
+
+    try {
+      if (search) {
+        const sellers = await sellerModel
+          .find({
+            $text: { $search: search },
+            status: "inactive",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSeller = await sellerModel
+          .find({
+            $text: { $search: search },
+            status: "inactive",
+          })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 })
+          .countDocuments();
+
+        responseReturn(res, 200, { sellers, totalSeller });
+      } else {
+        const sellers = await sellerModel
+          .find({ status: "inactive" })
+          .skip(skipPage)
+          .limit(perPage)
+          .sort({ createdAt: -1 });
+
+        const totalSeller = await sellerModel
+          .find({ status: "inactive" })
+          .countDocuments();
+        responseReturn(res, 200, { sellers, totalSeller });
+        // console.log(sellers);
+      }
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+    }
+  };
+  //
 
   seller_status_update = async (req, res) => {
     const { sellerId, status } = req.body;

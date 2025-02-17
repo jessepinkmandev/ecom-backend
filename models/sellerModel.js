@@ -43,4 +43,15 @@ const sellerSchema = new Schema(
   { timestamps: true }
 );
 
+sellerSchema.index(
+  {
+    name: "text",
+  },
+  {
+    weights: {
+      name: 5,
+    },
+  }
+);
+
 module.exports = model("sellers", sellerSchema);

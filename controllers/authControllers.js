@@ -98,6 +98,22 @@ class authControllers {
     }
   };
 
+  //
+  logout = async (req, res) => {
+    try {
+      res.cookie("accessToken", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+      });
+
+      responseReturn(res, 200, { message: "Logout Successful" });
+    } catch (error) {
+      responseReturn(res, 500, { error: error.message });
+      // console.log(error.message);
+    }
+  };
+  //
+
   getUser = async (req, res) => {
     const { id, role } = req;
 
